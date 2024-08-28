@@ -1,93 +1,94 @@
-# Python Development Guide
+# NCTR Python Style Guide
 
+Python is the main programming language used at the NCTR for software development. The following document outlines the general rules and tools for developing Python code at the NCTR.
 
+## Software
 
-## Getting started
+Software development is done using the [Visual Studio Code editor](https://code.visualstudio.com/). You should use the latest Python version unless you are specifically targeting an older version of Python, for example for running code on a legacy server.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+The following extensions are required in VS Code for Python development:
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+- [Ruff](https://marketplace.visualstudio.com/items?itemName=charliermarsh.ruff), a fast, Rust-based language server with linting and formatting built in.
+  - This also installs the Python extension (which also installs a Python debugger and the Pylance language server)
+- [Even Better TOML](https://marketplace.visualstudio.com/items?itemName=tamasfe.even-better-toml) – For reading TOML files like pyproject.toml and ruff.toml.
 
-## Add your files
+## Setup
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+Copy the NCTR's `ruff.toml` file from this repository to the root of any Python project you work on. The Ruff extension will read this file and enable linting on your project. This file is subject to change.
 
+Access the settings in Visual Studio Code with `CRTL+,`. Open the JSON settings file  and make sure these settings are configured like this:
+
+```json
+{
+    "editor.rulers": [
+        79,
+        99
+    ],
+    "ruff.nativeServer": "on",
+    "python.analysis.typeCheckingMode": "standard",
+    "editor.formatOnSave": true
+}
 ```
-cd existing_repo
-git remote add origin https://scm.ad.umanitoba.ca/nctr/nctr-external/python-development-guide.git
-git branch -M main
-git push -uf origin main
+
+You may have other settings in your `settings.json` beside these settings, just be sure these ones are configured as noted above.
+
+## Formatting
+
+The Ruff language server handles code formatting and will auto-format your code every time you press Save.
+
+Ruff can sometimes auto-address issues with your code, which are denoted by yellow-underlined lines. To tell Ruff to auto-fix your code, you can run the Ruff: Fix all auto-fixable problems task. Press CTRL+Shift+P and search for “Ruff” to find this task and click it to run.
+
+## Other Miscellaneous Rules
+
+For any project larger than a throwaway script, use the logging module over calling `print()`. Use [dictConfig](https://docs.python.org/3/library/logging.config.html#logging.config.dictConfig) (preferred method) or [basicConfig](https://docs.python.org/3/library/logging.html#logging.basicConfig) rather than instantiating loggers directly.
+
+Do not use the match statement. This is for compatibility with versions of Python older than 3.10 (see [PEP 622](https://peps.python.org/pep-0622/#the-match-statement)).
+
+## Docstrings
+
+Docstrings of all types follow [Google’s style guidelines for comments and docstrings](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings). Ruff will enforce these rules most of the time.
+
+## Type Annotations
+
+Developers must use [Python’s type annotation system](https://docs.python.org/3/library/typing.html) to specify the return type and argument type for every function. Because standard type checking is turned on in the VS Code settings, these type annotations will be required.
+
+Here is an example of a type-annotated function (with a proper docstring):
+
+```python
+from typing import Optional, Union
+
+
+def my_function(arg_1: Optional[str] = None) -> Union[int, str]:
+    """Returns 0 if arg_1 is None, otherwise returns an empty string.
+
+    Args:
+        arg_1: An optional string argument
+
+    Returns:
+        0 if arg_1 is None, an empty string otherwise.
+    """
+    if arg_1 is None:
+        return 0
+    return ""
 ```
 
-## Integrate with your tools
+Note that Python does not *enforce* types when you run code. The reason we include types is to be able to fix type errors while we’re writing code so that they don’t come up when running the code.
 
-- [ ] [Set up project integrations](https://scm.ad.umanitoba.ca/nctr/nctr-external/python-development-guide/-/settings/integrations)
+## Documentation
 
-## Collaborate with your team
+For small projects, Markdown files (.md) are sufficient for documenting these mandatory sections:
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+- Introduction
+- Installation
+- Usage
+- Testing
 
-## Test and Deploy
+For larger projects, use [Sphinx](https://www.sphinx-doc.org/en/master/). Or for internal projects, you can make a [GitLab Wiki repository](https://docs.gitlab.com/ee/user/project/wiki/). Note that the [napoleon extension](https://www.sphinx-doc.org/en/master/usage/extensions/napoleon.html) will need to be installed in Sphinx to be able to interpret Google-style docstrings.
 
-Use the built-in continuous integration in GitLab.
+## Dependencies and Installation
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+Developers should create a [pyproject.toml configuration file](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/) for each project. This file should be used for specifying dependencies instead of requirements.txt or setup.py or any other type of file.
 
-***
+## Testing
 
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+[Pytest](https://docs.pytest.org/en/stable/) should be used for unit testing. For Django projects, Django’s own test library can be used instead of pytest.
