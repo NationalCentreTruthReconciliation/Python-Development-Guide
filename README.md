@@ -36,13 +36,13 @@ You may have other settings in your `settings.json` beside these settings, just 
 
 The Ruff language server handles code formatting and will auto-format your code every time you press Save.
 
-Ruff can sometimes auto-address issues with your code, which are denoted by yellow-underlined lines. To tell Ruff to auto-fix your code, you can run the Ruff: Fix all auto-fixable problems task. Press CTRL+Shift+P and search for “Ruff” to find this task and click it to run.
+Ruff can sometimes auto-address issues with your code, which are denoted by yellow-underlined lines. To tell Ruff to auto-fix your code, you can run the **Ruff: Fix all auto-fixable problems** task. Press `CTRL+Shift+P` and search for “Ruff” to find this task and click it to run.
 
 ## Other Miscellaneous Rules
 
-For any project larger than a throwaway script, use the logging module over calling `print()`. Use [dictConfig](https://docs.python.org/3/library/logging.config.html#logging.config.dictConfig) (preferred method) or [basicConfig](https://docs.python.org/3/library/logging.html#logging.basicConfig) rather than instantiating loggers directly.
+For any project larger than a throwaway script, use the `logging` module over calling `print()`. Use [dictConfig](https://docs.python.org/3/library/logging.config.html#logging.config.dictConfig) (preferred method) or [basicConfig](https://docs.python.org/3/library/logging.html#logging.basicConfig) rather than instantiating loggers directly.
 
-Do not use the match statement. This is for compatibility with versions of Python older than 3.10 (see [PEP 622](https://peps.python.org/pep-0622/#the-match-statement)).
+Do not use [the match statement](https://peps.python.org/pep-0622/#the-match-statement). `match` is a relatively new syntax element and is not compatible with versions of Python that are still supported.
 
 ## Docstrings
 
@@ -76,7 +76,7 @@ Note that Python does not *enforce* types when you run code. The reason we inclu
 
 ## Documentation
 
-For small projects, Markdown files (.md) are sufficient for documenting these mandatory sections:
+For small projects, Markdown files (.md) like this README are sufficient for documenting these mandatory sections:
 
 - Introduction
 - Installation
