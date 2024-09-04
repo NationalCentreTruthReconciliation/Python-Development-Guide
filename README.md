@@ -20,6 +20,10 @@ Access the settings in Visual Studio Code with `CRTL+,`. Open the JSON settings 
 
 ```json
 {
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "charliermarsh.ruff",
+    },
     "editor.rulers": [
         79,
         99
