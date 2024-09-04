@@ -25,7 +25,6 @@ Access the settings in Visual Studio Code with `CRTL+,`. Open the JSON settings 
         "editor.defaultFormatter": "charliermarsh.ruff",
     },
     "editor.rulers": [
-        79,
         99
     ],
     "ruff.nativeServer": "on",
