@@ -23,11 +23,10 @@ Access the settings in Visual Studio Code with `CRTL+,`. Open the JSON settings 
     "[python]": {
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.rulers": [
+            99
+        ]
     },
-    "editor.rulers": [
-        79,
-        99
-    ],
     "ruff.nativeServer": "on",
     "python.analysis.typeCheckingMode": "standard",
     "editor.formatOnSave": true
