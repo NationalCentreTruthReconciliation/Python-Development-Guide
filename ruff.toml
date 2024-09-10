@@ -42,7 +42,7 @@ select = [
     "I",
     "SIM",
     "RUF",
-    "W505",
+    "W",
 ]
 
 # Docstring rules are too strict, ignore these rules:
