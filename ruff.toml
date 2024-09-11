@@ -1,4 +1,4 @@
-# Version: 2024.8.22
+# Version: 2024.9.11
 # NCTR ruff.toml
 
 # Exclude a variety of commonly ignored directories.
@@ -33,6 +33,7 @@ select = [
     "ANN206",
     "B",
     "C4",
+    "C90",
     "D",
     "E4",
     "E7",
@@ -52,6 +53,9 @@ fixable = ["ALL"]
 
 [lint.pycodestyle]
 max-doc-length = 99
+
+[lint.mccabe]
+max-complexity = 9
 
 [format]
 indent-style = "space"
