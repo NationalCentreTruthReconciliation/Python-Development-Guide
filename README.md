@@ -39,7 +39,19 @@ You may have other settings in your `settings.json` beside these settings, just 
 
 The Ruff language server handles code formatting and will auto-format your code every time you press Save.
 
-Ruff can sometimes auto-address issues with your code, which are denoted by yellow-underlined lines. To tell Ruff to auto-fix your code, you can run the **Ruff: Fix all auto-fixable problems** task. Press `CTRL+Shift+P` and search for “Ruff” to find this task and click it to run.
+## Linting
+
+Linting issues are denoted by yellow-underlined lines. Ruff can sometimes auto-fix these issues; to tell Ruff to auto-fix your code, you can run the **Ruff: Fix all auto-fixable problems** task. Press `CTRL+Shift+P` and search for “Ruff” to find this task and click it to run.
+
+### Exceptions to the Linting Rules
+
+One known issue with linting is that the `main` function is required to have a docstring. Since we do not recommend you actually put a docstring on the `main` function, the `main` function can be given a linting exception like this:
+
+```python
+def main(): # noqa: D103
+```
+
+See #1 to track this issue.
 
 ## Other Miscellaneous Rules
 
